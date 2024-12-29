@@ -20,3 +20,11 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('genres', GenreController::class)->except(['show', 'index']);
+    Route::resource('films', FilmController::class)->except(['show', 'index']);
+});
+Route::resource('films', FilmController::class)->only(['index', 'show']);
+Route::post('reviews/{film}', [ReviewController::class, 'store'])->middleware('auth');
+
